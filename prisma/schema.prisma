@@ -12,3 +12,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Group {
+  id    String  @id @default(uuid())
+  name  String
+  posts Post[]  // "post"を"posts"に変更しました
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  title     String
+  group     Group     @relation(fields: [groupId], references: [id])
+  groupId   String    // "groupId"フィールドを追加しました
+  attributes PostAttribute[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model PostAttribute {
+  id      String @id @default(uuid())
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String
+  key     String
+  value   String
+}
