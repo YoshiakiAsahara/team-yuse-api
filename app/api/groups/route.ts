@@ -1,31 +1,28 @@
 // pages/api/groups/index.ts
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../lib/prisma";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    try {
-      const { name } = req.body;
+// POST /api/groups
+export async function POST(req: NextRequest) {
+  try {
+    const { name } = await req.json();
 
-      if (!name) {
-        return res.status(400).json({ error: "Name is required" });
-      }
-
-      const group = await prisma.group.create({
-        data: {
-          name,
-        },
-      });
-
-      return res.status(201).json(group);
-    } catch (error) {
-      console.error("Error creating group:", error);
-      return res.status(500).json({ error: "Internal server error" });
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
-  } else {
-    return res.status(405).json({ error: "Method not allowed" });
+
+    const group = await prisma.group.create({
+      data: {
+        name,
+      },
+    });
+
+    return NextResponse.json(group, { status: 201 });
+  } catch (error) {
+    console.error("Error creating group:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
