@@ -6,17 +6,14 @@ import prisma from "../../lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const { name } = await req.json();
-
     if (!name) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
-
     const group = await prisma.group.create({
       data: {
         name,
       },
     });
-
     return NextResponse.json(group, { status: 201 });
   } catch (error) {
     console.error("Error creating group:", error);
