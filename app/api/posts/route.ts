@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     // NextRequest型でリクエストを取得
     const body = await req.json();
     const { title, groupId, attributes } = body;
-
     // データベースに新しい投稿を作成
     const newPost = await prisma.post.create({
       data: {
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-
     // 成功レスポンスを返す
     return NextResponse.json(newPost, { status: 201 });
   } catch (error) {
