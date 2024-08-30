@@ -1,8 +1,6 @@
-// pages/api/groups/index.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../lib/prisma";
 
-// POST /api/groups
 export async function POST(req: NextRequest) {
   try {
     const { name } = await req.json();
